@@ -1,0 +1,94 @@
+/* General Styles */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    /* Keep your existing font-family and background-color here if desired */
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa; /* Bootstrap light background */
+}
+
+header {
+    background-color: #343a40; /* Dark Bootstrap color */
+    padding: 1rem 0;
+}
+
+header nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+}
+
+header nav ul li {
+    margin: 0 1rem;
+}
+
+header nav ul li a {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+header nav ul li a:hover {
+    text-decoration: underline;
+}
+
+main {
+    flex: 1;
+    padding: 2rem;
+}
+
+footer {
+    background-color: #343a40;
+    color: #ffffff;
+    text-align: center;
+    padding: 1rem 0;
+}
+
+/* Content Area */
+main {
+    padding: 2rem;
+}
+
+h1, h2 {
+    color: #343a40;
+}
+
+.actions ul, .recent-shifts ul {
+    list-style: none;
+    padding: 0;
+}
+
+.actions ul li, .recent-shifts ul li {
+    margin: 1rem 0;
+}
+
+.actions ul li a.button, .recent-shifts ul li a {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    color: #ffffff;
+    background-color: #007bff; /* Bootstrap primary */
+    text-decoration: none;
+    border-radius: 0.25rem;
+}
+
+.actions ul li a.button:hover, .recent-shifts ul li a:hover {
+    background-color: #0056b3;
+}
+
+/* Form Styles */
+form {
+    max-width: 600px;
+    margin: 0 auto;
+    background: #ffffff;
+    padding: 1.5rem;
+    border: 1px solid #ced4da; /* Bootstrap light gray */
+    border-radius: 0.25rem;
+}

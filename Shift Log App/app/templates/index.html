@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block title %}Shift Management Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+
+  <!-- Flash Messages -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  <!-- Row 1: Full-Width Dashboard Header -->
+  <div class="row">
+    <div class="col-12 pt-3">
+      <h1>Shift Management Dashboard</h1>
+      <p>
+        Welcome to the Shift Management System. Use the left column for actions
+        and use the form on the right to select a worker to log shifts, view logs, or export logs.
+      </p>
+    </div>
+  </div>
+
+  <!-- Row 2: Two-Column Layout for Actions and Select Worker Form -->
+  <div class="row">
+    <!-- Left Column: Actions -->
+    <div class="col-md-3 bg-light pt-3">
+      <h2>Actions</h2>
+      <!-- Add Worker Button -->
+      <a href="{{ url_for('add_worker') }}" class="btn btn-secondary w-100 mb-2">
+        Add a New Worker
+      </a>
+      <hr>
+      <!-- Export Buttons -->
+      <div class="d-grid gap-2">
+        <a href="{{ url_for('export_workers_csv') }}" class="btn btn-secondary">
+          Export Workers to CSV
+        </a>
+        <a href="{{ url_for('export_shifts_csv') }}" class="btn btn-secondary">
+          Export Shifts to CSV
+        </a>
+      </div>
+    </div>
+
+    <!-- Right Column: Centered "Select Worker" Form -->
+    <div class="col-md-9 pt-3">
+      <div class="text-center mb-4">
+        <!-- Form with two "rows" of buttons -->
+        <form method="GET" class="d-inline-block">
+          <div class="mb-2">
+            <label for="worker_select" class="form-label">Select Worker:</label>
+            <select id="worker_select" name="worker_id" class="form-select d-inline-block w-auto mx-2"
+                    onchange="updateFormActions(this.value);">
+              <option value="">-- Select Worker --</option>
+              {% for worker in workers %}
+                <option value="{{ worker.id }}">{{ worker.first_name }} {{ worker.last_name }}</option>
+              {% endfor %}
+            </select>
+            <!-- "Log Shift" and "View Log" together -->
+            <button type="submit" id="logShiftBtn"
+                    formaction="{{ url_for('add_shift', worker_id=0) }}"
+                    class="btn btn-primary">
+              Log Shift
+            </button>
+            <button type="submit" id="viewLogBtn"
+                    formaction="{{ url_for('index') }}"
+                    class="btn btn-primary">
+              View Log
+            </button>
+          </div>
+          <!-- Export Log on a new line, aligned to the right -->
+          <div class="text-end">
+            <button type="submit" id="exportLogBtn"
+                    formaction="{{ url_for('export_worker_shifts_csv', worker_id=0) }}"
+                    class="btn btn-primary">
+              Export Log
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <script>
+      function updateFormActions(workerId) {
+          // Dynamically set the formaction for "Log Shift"
+          document.getElementById("logShiftBtn").setAttribute(
+              "formaction",
+              "{{ url_for('add_shift', worker_id=0) }}".replace('0', workerId)
+          );
+          // Dynamically set the formaction for "Export Log"
+          document.getElementById("exportLogBtn").setAttribute(
+              "formaction",
+              "{{ url_for('export_worker_shifts_csv', worker_id=0) }}".replace('0', workerId)
+          );
+      }
+      </script>
+    </div>
+  </div>
+
+  <!-- Row 3: Shift Log Grid (visible only if a worker is selected) -->
+  {% if selected_worker %}
+  <div class="row mt-4">
+    <div class="col-12">
+      <h2 class="text-start">Shift Log for {{ selected_worker.first_name }} {{ selected_worker.last_name }}</h2>
+    </div>
+  </div>
+  <div class="row">
+    {% if worker_shifts %}
+      {% for shift in worker_shifts %}
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
+         <div class="card">
+           <div class="card-body">
+             <h5 class="card-title">{{ shift.date.strftime('%Y-%m-%d') }}</h5>
+             <p class="card-text">
+               <strong>Hours:</strong> {{ shift.hours_worked }}<br>
+               <strong>Pay:</strong> ${{ "%.2f"|format(shift.pay_earned) }}
+             </p>
+             <button class="btn btn-primary btn-sm" onclick="window.location.href='{{ url_for('shift_results', shift_id=shift.id) }}'">
+               View Details
+             </button>
+           </div>
+         </div>
+      </div>
+      {% endfor %}
+    {% else %}
+    <div class="col-12">
+      <p>No shifts logged for this worker.</p>
+    </div>
+    {% endif %}
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

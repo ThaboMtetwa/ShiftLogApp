@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Log Shift{% endblock %}
+
+{% block content %}
+<h2>Log a Shift for {{ worker.first_name }} {{ worker.last_name }}</h2>
+
+<form action="{{ url_for('add_shift', worker_id=worker.id) }}" method="POST">
+    <div>
+        <label for="start_time">Start Time (HH:MM):</label>
+        <input type="text" id="start_time" name="start_time" placeholder="e.g., 08:30" required>
+    </div>
+
+    <div>
+        <label for="end_time">End Time (HH:MM):</label>
+        <input type="text" id="end_time" name="end_time" placeholder="e.g., 17:30" required>
+    </div>
+
+    <button type="submit">Log Shift</button>
+</form>
+
+{% endblock %}

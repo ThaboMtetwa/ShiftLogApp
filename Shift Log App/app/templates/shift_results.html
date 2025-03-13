@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Shift Results{% endblock %}
+
+{% block content %}
+<h2>Shift Details for {{ shift.worker.first_name }} {{ shift.worker.last_name }}</h2>
+
+<p><strong>Date:</strong> {{ shift.date.strftime('%Y-%m-%d') }}</p>
+<p><strong>Start Time:</strong> {{ shift.start_time.strftime('%H:%M') }}</p>
+<p><strong>End Time:</strong> {{ shift.end_time.strftime('%H:%M') }}</p>
+<p><strong>Hours Worked:</strong> {{ shift.hours_worked }}</p>
+<p><strong>Pay Earned:</strong> ${{ "%.2f"|format(shift.pay_earned) }}</p>
+
+<a href="{{ url_for('index') }}" class="button">Back to Home</a>
+{% endblock %}
